@@ -4,8 +4,9 @@ const faq = defineCollection({
   type: 'content',
   schema: z.object({
     question: z.string(),
-    order: z.number().default(0)
-  })
+    answer: z.string(),
+    order: z.number().default(0),
+  }),
 });
 
 const pricing = defineCollection({
@@ -13,8 +14,8 @@ const pricing = defineCollection({
   schema: z.object({
     name: z.string(),
     price: z.string(),
-    features: z.array(z.string())
-  })
+    features: z.array(z.string()),
+  }),
 });
 
 const cta = defineCollection({
@@ -22,8 +23,8 @@ const cta = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string().optional(),
-    buttonText: z.string().default('Skontaktuj się')
-  })
+    buttonText: z.string().default('Skontaktuj się'),
+  }),
 });
 
 export const collections = { faq, pricing, cta };

@@ -1,4 +1,7 @@
 ---
+import 'uno.css';
+import '@/styles/global.css';
+
 const {
   title = 'Ubezpieczenia – szybko, prosto, bez haczyków',
   description = 'Porównujemy oferty 12 towarzystw i pomagamy wybrać najlepszą ochronę.',
@@ -8,10 +11,6 @@ const {
   description?: string;
   ogImage?: string;
 };
-
-import 'uno.css'; // włącza wygenerowane style UnoCSS
-import '@/styles/global.css'; // Twoje globalne style + Open Props
-// ...reszta importów/props
 ---
 
 <html lang="pl">
@@ -30,11 +29,9 @@ import '@/styles/global.css'; // Twoje globalne style + Open Props
     />
     <meta property="og:type" content="website" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-
     <link rel="preload" href="/logo.svg" as="image" />
 
     <style is:global>
-      /* sticky header shadow on scroll (progressive enhancement) */
       .site-header[data-scrolled='true'] {
         box-shadow: var(--shadow-2);
         background: rgba(255, 255, 255, 0.9);
@@ -67,7 +64,6 @@ import '@/styles/global.css'; // Twoje globalne style + Open Props
         </ul>
       </nav>
       <script>
-        const h = document.currentScript?.previousElementSibling?.previousElementSibling;
         const header = document.querySelector('.site-header');
         const onScroll = () =>
           header && header.setAttribute('data-scrolled', String(window.scrollY > 4));
@@ -91,12 +87,12 @@ import '@/styles/global.css'; // Twoje globalne style + Open Props
           <div class="eyebrow mb-2">Szybkie linki</div>
           <ul class="space-y-1">
             <li><a href="/blog">Blog</a></li>
-            <li><a href="#kontakt">Kontakt</a></li>
+            <li><a href="/#kontakt">Kontakt</a></li>
             <li><a href="#">Polityka prywatności</a></li>
           </ul>
         </div>
-        <div id="kontakt">
-          <div class="eyebrow mb-2">Kontakt</div>
+        <div>
+          <div class="eyebrow mb-2">Dane</div>
           <p>tel. 123 456 789<br />biuro@twojeubezpieczenia.pl</p>
         </div>
       </div>

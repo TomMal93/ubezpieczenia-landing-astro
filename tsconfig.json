@@ -3,7 +3,8 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": { "@/*": ["src/*"] },
-    "types": ["astro/client"]
+    "types": ["astro/client"],
+    "lib": ["ES2022", "DOM"]
   },
   "include": ["src", "astro.config.mjs", "uno.config.ts"]
 }

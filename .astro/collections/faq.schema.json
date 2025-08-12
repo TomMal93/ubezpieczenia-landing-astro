@@ -7,6 +7,9 @@
         "question": {
           "type": "string"
         },
+        "answer": {
+          "type": "string"
+        },
         "order": {
           "type": "number",
           "default": 0
@@ -16,7 +19,8 @@
         }
       },
       "required": [
-        "question"
+        "question",
+        "answer"
       ],
       "additionalProperties": false
     }

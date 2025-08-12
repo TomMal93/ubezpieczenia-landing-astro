@@ -1,5 +1,4 @@
 ---
-import { Image } from 'astro:assets';
 interface Props {
   title: string;
   href: string;
@@ -14,13 +13,13 @@ const { title, href, excerpt, cover, date, readingTime } = Astro.props as Props;
 <a href={href} class="block group card overflow-hidden">
   {
     cover && (
-      <Image
-        src={cover.src}
+      <img
+        src={`${cover.src}?auto=format&fit=max&w=800`}
         alt={cover.alt ?? ''}
-        width={800}
-        height={450}
-        format="webp"
+        width="800"
+        height="450"
         loading="lazy"
+        style="aspect-ratio:16/9;object-fit:cover;width:100%;display:block"
       />
     )
   }
