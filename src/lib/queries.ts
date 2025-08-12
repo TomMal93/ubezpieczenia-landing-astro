@@ -36,6 +36,16 @@ export const POST_BY_SLUG_QUERY = /* GraphQL */ `
   }
 `;
 
+export const POSTS_COUNT_QUERY = /* GraphQL */ `
+  query PostsCount {
+    postsConnection {
+      aggregate {
+        count
+      }
+    }
+  }
+`;
+
 export type HygraphPost = {
   id: string;
   title: string;

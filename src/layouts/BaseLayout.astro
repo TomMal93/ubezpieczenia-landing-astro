@@ -28,8 +28,8 @@ const {
       content={new URL(ogImage, Astro.site ?? 'https://przyklad-ubezpieczenia.pl').toString()}
     />
     <meta property="og:type" content="website" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="preload" href="/logo.svg" as="image" />
+    <link rel="icon" href="/images/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" href="/images/logo.svg" as="image" />
 
     <style is:global>
       .site-header[data-scrolled='true'] {
@@ -53,7 +53,7 @@ const {
     <header class="site-header sticky top-0 z-50 border-b border-[var(--surface-2)]">
       <nav class="container flex items-center justify-between py-3" aria-label="Główna nawigacja">
         <a href="/" class="flex items-center gap-2 ring-focus">
-          <img src="/logo.svg" alt="" width="28" height="28" />
+          <img src="/images/logo.svg" alt="" width="28" height="28" />
           <span class="font-semibold">TwojeUbezpieczenia</span>
         </a>
         <ul class="hidden md:flex items-center gap-6">
@@ -78,7 +78,7 @@ const {
       <div class="container py-10 grid gap-8 md:grid-cols-3">
         <div>
           <div class="flex items-center gap-2 mb-2">
-            <img src="/logo.svg" alt="" width="24" height="24" />
+            <img src="/images/logo.svg" alt="" width="24" height="24" />
             <strong>TwojeUbezpieczenia</strong>
           </div>
           <p class="muted">Bezpiecznie. Transparentnie. Po ludzku.</p>
@@ -101,6 +101,6 @@ const {
       </div>
     </footer>
 
-    <link rel="stylesheet" href="/_pagefind/pagefind-ui.css" />
+    {!import.meta.env.DEV && <link rel="stylesheet" href="/_pagefind/pagefind-ui.css" />}
   </body>
 </html>

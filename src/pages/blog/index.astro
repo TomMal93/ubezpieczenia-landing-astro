@@ -1,0 +1,51 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Container from '@/components/ui/Container.astro';
+import Section from '@/components/ui/Section.astro';
+import BlogList from '@/components/blog/BlogList.astro';
+import Breadcrumbs from '@/components/ui/Breadcrumbs.astro';
+import { getPosts, getPostsCount } from '@/lib/hygraph';
+
+const POSTS_PER_PAGE = 9;
+const currentPage = 1;
+
+const total = await getPostsCount();
+const totalPages = Math.max(1, Math.ceil(total / POSTS_PER_PAGE));
+const posts = await getPosts(POSTS_PER_PAGE, 0);
+
+const origin = (Astro.site ?? new URL('https://przyklad-ubezpieczenia.pl')).toString().replace(/\/$/, '');
+const listUrls = posts.map((p) => `${origin}/blog/${p.slug}`);
+---
+
+<BaseLayout title="Blog – porady i przewodniki ubezpieczeniowe" description="Czytaj praktyczne artykuły o OC/AC, mieszkaniu i życiu.">
+  <Section>
+    <Container>
+      <Breadcrumbs items={[{ label: 'Strona główna', href: '/' }, { label: 'Blog' }]} />
+      <h1 class="text-4xl font-bold mb-2">Blog</h1>
+      <p class="muted mb-6">Porady, przewodniki i inspiracje dotyczące ubezpieczeń.</p>
+
+      <!-- JSON-LD: Blog + BreadcrumbList -->
+      <script type="application/ld+json">
+        {JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'Blog',
+          name: 'Blog – TwojeUbezpieczenia',
+          url: `${origin}/blog`,
+          blogPost: listUrls.map((u) => ({ '@type': 'BlogPosting', '@id': u, url: u }))
+        })}
+      </script>
+      <script type="application/ld+json">
+        {JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Strona główna', item: `${origin}/` },
+            { '@type': 'ListItem', position: 2, name: 'Blog', item: `${origin}/blog` }
+          ]
+        })}
+      </script>
+
+      <BlogList posts={posts} currentPage={currentPage} totalPages={totalPages} />
+    </Container>
+  </Section>
+</BaseLayout>

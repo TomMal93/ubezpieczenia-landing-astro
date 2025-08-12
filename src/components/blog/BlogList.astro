@@ -1,0 +1,38 @@
+---
+import BlogCard from './BlogCard.astro';
+import Pagination from './Pagination.astro';
+import type { HygraphPost } from '@/lib/queries';
+import { formatDatePL, readingTimeFromHtml } from '@/lib/utils';
+
+interface Props {
+  posts: HygraphPost[];
+  currentPage: number;
+  totalPages: number;
+}
+const { posts, currentPage, totalPages } = Astro.props as Props;
+---
+
+<div id="search" class="mb-8"></div>
+<script src="/_pagefind/pagefind-ui.js" type="module"></script>
+<script type="module">
+  // @ts-ignore
+  new PagefindUI({ element: '#search', showImages: true, pageSize: 5 });
+</script>
+
+<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+  {
+    posts.map((p) => (
+      <BlogCard
+        href={`/blog/${p.slug}`}
+        title={p.title}
+        excerpt={p.excerpt ?? ''}
+        cover={p.coverImage?.url ? { src: p.coverImage.url } : undefined}
+        date={formatDatePL(p.publishedAt)}
+        readingTime={readingTimeFromHtml(p.content?.html ?? '')}
+        tags={p.tags ?? []}
+      />
+    ))
+  }
+</div>
+
+<Pagination current={currentPage} totalPages={totalPages} />

@@ -1,0 +1,65 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Container from '@/components/ui/Container.astro';
+import Section from '@/components/ui/Section.astro';
+import BlogList from '@/components/blog/BlogList.astro';
+import Breadcrumbs from '@/components/ui/Breadcrumbs.astro';
+import { getPosts } from '@/lib/hygraph';
+import { tagToSlug } from '@/lib/utils';
+
+export async function getStaticPaths() {
+  // Pobieramy sporo postów (Hygraph: podmień na query po tagach, jeśli wolisz)
+  const posts = await getPosts(1000, 0);
+  const tags = new Set<string>();
+  for (const p of posts) (p.tags ?? []).forEach((t) => tags.add(tagToSlug(t)));
+  return Array.from(tags).map((t) => ({ params: { tag: t } }));
+}
+
+const tagSlug = Astro.params.tag!;
+const all = await getPosts(1000, 0);
+const filtered = all.filter((p) => (p.tags ?? []).some((t) => tagToSlug(t) === tagSlug));
+
+const origin = (Astro.site ?? new URL('https://przyklad-ubezpieczenia.pl')).toString().replace(/\/$/, '');
+const title = `Artykuły z tagiem „${decodeURIComponent(tagSlug)}”`;
+const urls = filtered.map((p) => `${origin}/blog/${p.slug}`);
+---
+
+<BaseLayout title={title} description={`Wpisy oznaczone tagiem ${tagSlug}.`}>
+  <Section>
+    <Container>
+      <Breadcrumbs
+        items={[
+          { label: 'Strona główna', href: '/' },
+          { label: 'Blog', href: '/blog' },
+          { label: `#${tagSlug}` }
+        ]}
+      />
+      <h1 class="text-3xl font-bold mb-2">{title}</h1>
+      <p class="muted mb-6">Znaleziono {filtered.length} {filtered.length === 1 ? 'wpis' : 'wpisy'}</p>
+
+      <!-- JSON-LD: CollectionPage + BreadcrumbList -->
+      <script type="application/ld+json">
+        {JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'CollectionPage',
+          name: title,
+          url: `${origin}/blog/tag/${tagSlug}`,
+          hasPart: urls.map((u) => ({ '@type': 'Article', '@id': u, url: u }))
+        })}
+      </script>
+      <script type="application/ld+json">
+        {JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Strona główna', item: `${origin}/` },
+            { '@type': 'ListItem', position: 2, name: 'Blog', item: `${origin}/blog` },
+            { '@type': 'ListItem', position: 3, name: `#${tagSlug}`, item: `${origin}/blog/tag/${tagSlug}` }
+          ]
+        })}
+      </script>
+
+      <BlogList posts={filtered} currentPage={1} totalPages={1} />
+    </Container>
+  </Section>
+</BaseLayout>

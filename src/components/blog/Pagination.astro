@@ -1,0 +1,63 @@
+---
+interface Props {
+  current: number; // aktualna strona (1-indexed)
+  totalPages: number; // łączna liczba stron
+  base?: string; // link do strony 1
+  pageBase?: string; // prefiks dla /page/N
+}
+const { current, totalPages, base = '/blog', pageBase = '/blog/page' } = Astro.props as Props;
+
+const prevHref = current > 1 ? (current === 2 ? base : `${pageBase}/${current - 1}`) : null;
+const nextHref = current < totalPages ? `${pageBase}/${current + 1}` : null;
+
+const windowSize = 2;
+const start = Math.max(1, current - windowSize);
+const end = Math.min(totalPages, current + windowSize);
+const pages = Array.from({ length: end - start + 1 }, (_, i) => start + i);
+---
+
+{
+  totalPages > 1 && (
+    <nav class="mt-10 flex items-center gap-2" aria-label="Paginacja bloga">
+      {prevHref ? (
+        <a class="btn-ghost" href={prevHref} aria-label="Poprzednia strona">
+          ←
+        </a>
+      ) : (
+        <span class="btn-ghost opacity-50 select-none">←</span>
+      )}
+      <a class={`btn-ghost ${current === 1 ? 'font-bold underline' : ''}`} href={base}>
+        1
+      </a>
+      {start > 2 && <span class="px-2 muted">…</span>}
+      {pages.map(
+        (p) =>
+          p !== 1 &&
+          p !== totalPages && (
+            <a
+              class={`btn-ghost ${current === p ? 'font-bold underline' : ''}`}
+              href={p === 1 ? base : `${pageBase}/${p}`}
+            >
+              {p}
+            </a>
+          ),
+      )}
+      {end < totalPages - 1 && <span class="px-2 muted">…</span>}
+      {totalPages > 1 && (
+        <a
+          class={`btn-ghost ${current === totalPages ? 'font-bold underline' : ''}`}
+          href={`${pageBase}/${totalPages}`}
+        >
+          {totalPages}
+        </a>
+      )}
+      {nextHref ? (
+        <a class="btn-ghost" href={nextHref} aria-label="Następna strona">
+          →
+        </a>
+      ) : (
+        <span class="btn-ghost opacity-50 select-none">→</span>
+      )}
+    </nav>
+  )
+}

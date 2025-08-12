@@ -1,0 +1,40 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Container from '@/components/ui/Container.astro';
+import Section from '@/components/ui/Section.astro';
+import BlogList from '@/components/blog/BlogList.astro';
+import { getPosts, getPostsCount } from '@/lib/hygraph';
+
+const POSTS_PER_PAGE = 9;
+
+export async function getStaticPaths() {
+  const total = await getPostsCount();
+  const totalPages = Math.max(1, Math.ceil(total / POSTS_PER_PAGE));
+  return Array.from({ length: totalPages }, (_, i) => {
+    const page = i + 1;
+    return { params: { page: String(page) } };
+  });
+}
+
+const pageParam = Number(Astro.params.page ?? '1');
+const currentPage = Number.isFinite(pageParam) && pageParam > 0 ? pageParam : 1;
+
+const total = await getPostsCount();
+const totalPages = Math.max(1, Math.ceil(total / POSTS_PER_PAGE));
+const skip = (currentPage - 1) * POSTS_PER_PAGE;
+
+const posts = await getPosts(POSTS_PER_PAGE, skip);
+---
+
+<BaseLayout
+  title={`Blog – strona ${currentPage}`}
+  description="Porady, przewodniki i inspiracje dotyczące ubezpieczeń."
+>
+  <Section>
+    <Container>
+      <h1 class="text-4xl font-bold mb-2">Blog</h1>
+      <p class="muted mb-6">Strona {currentPage} z {totalPages}</p>
+      <BlogList posts={posts} currentPage={currentPage} totalPages={totalPages} />
+    </Container>
+  </Section>
+</BaseLayout>

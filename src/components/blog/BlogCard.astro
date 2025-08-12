@@ -6,15 +6,20 @@ interface Props {
   cover?: { src: string; alt?: string; width?: number; height?: number };
   date?: string;
   readingTime?: number;
+  tags?: string[];
 }
-const { title, href, excerpt, cover, date, readingTime } = Astro.props as Props;
+const { title, href, excerpt, cover, date, readingTime, tags = [] } = Astro.props as Props;
+
+const src = cover?.src ?? '';
+const isRemote = /^https?:\/\//i.test(src);
+const imgSrc = isRemote ? `${src}?auto=format&fit=max&w=800` : src;
 ---
 
 <a href={href} class="block group card overflow-hidden">
   {
     cover && (
       <img
-        src={`${cover.src}?auto=format&fit=max&w=800`}
+        src={imgSrc}
         alt={cover.alt ?? ''}
         width="800"
         height="450"
@@ -30,5 +35,14 @@ const { title, href, excerpt, cover, date, readingTime } = Astro.props as Props;
       {date && <span>{date}</span>}
       {readingTime && <span> · {readingTime} min czytania</span>}
     </p>
+    {
+      tags.length > 0 && (
+        <div class="mt-3 flex flex-wrap gap-2">
+          {tags.map((t) => (
+            <span class="btn-ghost px-2 py-1 text-xs">#{t}</span>
+          ))}
+        </div>
+      )
+    }
   </div>
 </a>

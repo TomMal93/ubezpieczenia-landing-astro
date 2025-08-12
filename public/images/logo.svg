@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="32" viewBox="0 0 160 32" fill="none">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#4f46e5"></stop>
+      <stop offset="1" stop-color="#6366f1"></stop>
+    </linearGradient>
+  </defs>
+  <g>
+    <rect x="2" y="4" width="24" height="24" rx="6" fill="url(#g)"></rect>
+    <path d="M8 16l4 4 8-8" stroke="white" stroke-width="2" fill="none"></path>
+    <text x="34" y="21" font-family="system-ui, -apple-system, Segoe UI, Roboto" font-size="14" fill="#111827">TwojeUbezpieczenia</text>
+  </g>
+</svg>
