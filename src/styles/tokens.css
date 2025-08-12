@@ -1,0 +1,11 @@
+:root {
+  /* Open Props base tokens are imported in global.css */
+  --brand: var(--indigo-7);
+  --brand-strong: var(--indigo-8);
+  --text: var(--gray-12);
+  --muted: var(--gray-7);
+  --bg: var(--gray-0);
+  --surface-1: var(--gray-1);
+  --surface-2: var(--gray-2);
+  --surface-3: var(--gray-3);
+}

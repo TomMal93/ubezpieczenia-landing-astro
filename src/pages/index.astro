@@ -1,0 +1,78 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Section from '@/components/ui/Section.astro';
+import Container from '@/components/ui/Container.astro';
+import Button from '@/components/ui/Button.astro';
+import Eyebrow from '@/components/ui/Eyebrow.astro';
+import Card from '@/components/ui/Card.astro';
+import { Image } from 'astro:assets';
+
+const pageTitle = 'Ubezpieczenia szyte na miarę – szybko, prosto, bez ukrytych haczyków.';
+const pageDesc =
+  'Porównujemy oferty 12 towarzystw i pomagamy wybrać najlepszą ochronę dla Ciebie i Twojej firmy.';
+---
+
+<BaseLayout title={pageTitle} description={pageDesc} ogImage="/images/hero.jpg">
+  <Section class="pt-10">
+    <Container>
+      <div class="grid lg:grid-cols-2 items-center gap-10">
+        <div>
+          <Eyebrow>Bezpiecznie i transparentnie</Eyebrow>
+          <h1 class="mt-2 text-4xl sm:text-5xl font-extrabold">{pageTitle}</h1>
+          <p class="lead mt-4">{pageDesc}</p>
+          <div class="mt-6 flex gap-3">
+            <Button href="#kontakt" ariaLabel="Uzyskaj wycenę">Uzyskaj wycenę</Button>
+            <Button href="tel:123456789" variant="ghost" ariaLabel="Zadzwoń">Zadzwoń: 123 456 789</Button>
+          </div>
+
+          <div class="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <Card>
+              <p class="text-sm"><strong>4.9/5</strong><br /><span class="muted">opinie klientów</span></p>
+            </Card>
+            <Card>
+              <p class="text-sm"><strong>24/7</strong><br /><span class="muted">Assistance</span></p>
+            </Card>
+            <Card>
+              <p class="text-sm"><strong>12</strong><br /><span class="muted">towarzystw w porównaniu</span></p>
+            </Card>
+          </div>
+        </div>
+
+        <div class="relative">
+          <Image
+            src="/images/hero.jpg"
+            alt="Rodzina korzystająca z ubezpieczenia – spokój i bezpieczeństwo"
+            width={1200}
+            height={900}
+            format="webp"
+            sizes="(max-width: 1024px) 100vw, 600px"
+            class="rounded-2xl shadow-lg"
+            loading="eager"
+            decoding="async"
+          />
+        </div>
+      </div>
+    </Container>
+  </Section>
+
+  <Section id="oferta" class="bg-[var(--surface-1)]">
+    <Container>
+      <Eyebrow>Oferta w skrócie</Eyebrow>
+      <h2 class="text-3xl font-bold mt-2">Kompleksowa ochrona dla Ciebie i firmy</h2>
+      <div class="mt-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <Card><h3 class="font-semibold">OC / AC</h3><p class="muted mt-1">Dla kierowców – najlepszy pakiet w rozsądnej cenie.</p></Card>
+        <Card><h3 class="font-semibold">Mieszkanie</h3><p class="muted mt-1">Mienie, assistance, OC w życiu prywatnym.</p></Card>
+        <Card><h3 class="font-semibold">Życie</h3><p class="muted mt-1">Indywidualnie dobrana suma ubezpieczenia.</p></Card>
+        <Card><h3 class="font-semibold">Firmowe</h3><p class="muted mt-1">Ochrona majątku i odpowiedzialności.</p></Card>
+      </div>
+    </Container>
+  </Section>
+
+  <Section id="o-nas">
+    <Container>
+      <Eyebrow>Dlaczego my</Eyebrow>
+      <h2 class="text-3xl font-bold mt-2">Zaufanie budujemy działaniem</h2>
+      <p class="muted mt-2">Bezpłatna konsultacja, jasne warunki, formalności online.</p>
+    </Container>
+  </Section>
+</BaseLayout>

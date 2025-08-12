@@ -1,0 +1,28 @@
+{
+  "$ref": "#/definitions/cta",
+  "definitions": {
+    "cta": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "buttonText": {
+          "type": "string",
+          "default": "Skontaktuj się"
+        },
+        "$schema": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "title"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

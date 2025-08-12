@@ -1,0 +1,6 @@
+---
+const { id, class: klass } = Astro.props as { id?: string; class?: string };
+---
+<section id={id} class={`py-16 sm:py-20 ${klass ?? ''}`.trim()}>
+  <slot />
+</section>

@@ -1,0 +1,14 @@
+---
+interface Props {
+  href?: string;
+  variant?: 'solid' | 'ghost';
+  ariaLabel?: string;
+}
+const { href, variant = 'solid', ariaLabel } = Astro.props as Props;
+const classes = variant === 'ghost' ? 'btn-ghost' : 'btn';
+---
+{href ? (
+  <a class={classes} href={href} aria-label={ariaLabel}><slot /></a>
+) : (
+  <button class={classes} aria-label={ariaLabel}><slot /></button>
+)}

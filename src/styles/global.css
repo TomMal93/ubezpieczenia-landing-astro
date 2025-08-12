@@ -1,0 +1,51 @@
+@import 'open-props/style';
+@import 'open-props/normalize';
+
+/* Design tokens */
+@import './tokens.css';
+
+:root {
+  color-scheme: light;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans,
+    "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Links */
+a {
+  color: var(--brand);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+/* Focus styles */
+:where(a, button, input, select, textarea, [tabindex], [role='button']) {
+  outline: none;
+}
+:where(a, button, input, select, textarea, [tabindex], [role='button']):focus-visible {
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--brand) 70%, white);
+  border-radius: 12px;
+}
+
+/* Utility */
+.lead {
+  font-size: clamp(1.125rem, 1.3vw + 0.6rem, 1.375rem);
+  line-height: 1.6;
+  color: var(--gray-9);
+}
+
+/* Prose tweaks */
+.prose :where(h1, h2, h3, h4) {
+  scroll-margin-top: 6rem;
+}

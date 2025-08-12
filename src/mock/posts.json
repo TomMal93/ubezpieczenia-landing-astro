@@ -1,0 +1,38 @@
+[
+  {
+    "id": "m1",
+    "title": "OC czy AC? Praktyczny przewodnik dla kierowców 2025",
+    "slug": "oc-czy-ac-praktyczny-przewodnik-2025",
+    "excerpt": "Kiedy warto kupić samo OC, a kiedy dopłacić do AC? Sprawdzamy na realnych przykładach.",
+    "tags": ["motoryzacja", "OC/AC"],
+    "publishedAt": "2025-05-10T10:00:00.000Z",
+    "coverImage": { "url": "/images/hero.jpg" },
+    "content": {
+      "html": "<h2>OC a AC — podstawy</h2><p>OC jest obowiązkowe, AC dobrowolne. Warto rozważyć pakiet w nowych lub intensywnie użytkowanych autach.</p><h3>Kiedy dopłacić do AC?</h3><ul><li>Nowy lub drogi pojazd</li><li>Parkowanie na ulicy</li><li>Codzienne dojazdy</li></ul>"
+    }
+  },
+  {
+    "id": "m2",
+    "title": "Na co zwrócić uwagę w ubezpieczeniu mieszkania",
+    "slug": "na-co-zwrocic-uwage-w-ubezpieczeniu-mieszkania",
+    "excerpt": "Suma ubezpieczenia, mury, wyposażenie, assistance i OC w życiu prywatnym — tłumaczymy po kolei.",
+    "tags": ["mieszkanie"],
+    "publishedAt": "2025-04-02T08:30:00.000Z",
+    "coverImage": { "url": "/images/hero.jpg" },
+    "content": {
+      "html": "<h2>Zakres ochrony</h2><p>Sprawdź czy polisa obejmuje zalania, pożary, przepięcia oraz kradzież z włamaniem.</p><h3>Dodatki</h3><p>Assistance domowe, sprzęt elektroniczny, OC w życiu prywatnym.</p>"
+    }
+  },
+  {
+    "id": "m3",
+    "title": "Ubezpieczenie na życie: jak dobrać sumę ubezpieczenia",
+    "slug": "ubezpieczenie-na-zycie-jak-dobrac-sume",
+    "excerpt": "Prosty kalkulator i zasady doboru sumy ubezpieczenia na życie dla singli i rodzin.",
+    "tags": ["życie"],
+    "publishedAt": "2025-03-15T12:00:00.000Z",
+    "coverImage": { "url": "/images/hero.jpg" },
+    "content": {
+      "html": "<h2>Ile to powinno być?</h2><p>Popularna reguła to 10–15× roczny dochód, ale uwzględnij kredyt i dzieci.</p><h3>Na co patrzeć</h3><p>Wyłączenia odpowiedzialności, karencje i limity świadczeń.</p>"
+    }
+  }
+]
