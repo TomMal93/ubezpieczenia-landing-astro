@@ -1,0 +1,73 @@
+---
+/** Spis treści z H2/H3. Generuje linki + podświetla aktywną sekcję. */
+interface Props {
+  html: string;
+}
+const { html } = Astro.props as Props;
+
+const slug = (s: string) =>
+  s
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+const matches = Array.from(html.matchAll(/<(h[23])[^>]*>(.*?)<\/\1>/gis));
+const items = matches.map((m) => {
+  const level = m[1].toLowerCase() === 'h2' ? 2 : 3;
+  const text = m[2].replace(/<[^>]*>/g, '').trim();
+  const id = slug(text);
+  return { level, text, id };
+});
+---
+
+{
+  items.length > 1 && (
+    <aside class="card p-4 sticky top-24">
+      <strong>Spis treści</strong>
+      <nav class="mt-3">
+        <ul class="space-y-1">
+          {items.map((i) => (
+            <li class={`${i.level === 3 ? 'pl-4' : ''}`}>
+              <a href={`#${i.id}`} class="btn-ghost px-2 py-1 block" data-toc-id={i.id}>
+                {i.text}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </aside>
+  )
+}
+<script is:inline>
+  // Nadaj id nagłówkom, jeśli nie mają
+  const headings = Array.from(document.querySelectorAll('.prose h2, .prose h3'));
+  const toSlug = (s) =>
+    s
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  headings.forEach((h) => {
+    if (!h.id) h.id = toSlug(h.textContent || '');
+  });
+
+  // Aktywny link w ToC
+  const links = Array.from(document.querySelectorAll('[data-toc-id]'));
+  const map = new Map(links.map((a) => [a.getAttribute('data-toc-id'), a]));
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e) => {
+        const id = e.target.id;
+        const a = map.get(id);
+        if (!a) return;
+        if (e.isIntersecting) a.classList.add('underline', 'font-semibold');
+        else a.classList.remove('underline', 'font-semibold');
+      });
+    },
+    { rootMargin: '0px 0px -70% 0px', threshold: 0.1 },
+  );
+  headings.forEach((h) => io.observe(h));
+</script>

@@ -1,0 +1,61 @@
+---
+const label = 'Przełącz motyw';
+---
+
+<!-- brak ID, wszystko będzie szukane względnie do tego kontenera -->
+<div class="inline-flex items-center" data-theme-toggle>
+  <button class="icon-btn" type="button" aria-label={label} title={label} aria-pressed="false">
+    <!-- moon/sun -->
+    <svg class="tt-moon" width="20" height="20" viewBox="0 0 24 24" fill="none">
+      <path
+        d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"></path>
+    </svg>
+    <svg class="tt-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" style="display:none">
+      <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"></circle>
+      <path
+        d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"></path>
+    </svg>
+  </button>
+</div>
+
+<!-- zamknięte w IIFE, więc nic nie trafia do globalnego scope -->
+<script is:inline>
+  (() => {
+    const rootEl = document.documentElement;
+    const host = document.currentScript?.previousElementSibling; // <div data-theme-toggle> przed <script>
+    if (!host) return;
+
+    const btn = host.querySelector('button');
+    const moon = host.querySelector('.tt-moon');
+    const sun = host.querySelector('.tt-sun');
+
+    const apply = (theme) => {
+      rootEl.dataset.theme = theme;
+      try {
+        localStorage.setItem('theme', theme);
+      } catch {}
+      const isDark = theme === 'dark';
+      btn?.setAttribute('aria-pressed', String(isDark));
+      if (moon && sun) {
+        moon.style.display = isDark ? 'none' : '';
+        sun.style.display = isDark ? '' : 'none';
+      }
+    };
+
+    // ustaw stan ikony wg aktualnego motywu
+    apply(
+      rootEl.dataset.theme ||
+        (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'),
+    );
+
+    btn?.addEventListener('click', () => {
+      apply(rootEl.dataset.theme === 'dark' ? 'light' : 'dark');
+    });
+  })();
+</script>

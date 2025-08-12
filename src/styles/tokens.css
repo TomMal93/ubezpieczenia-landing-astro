@@ -1,5 +1,4 @@
 :root {
-  /* Open Props base tokens are imported in global.css */
   --brand: var(--indigo-7);
   --brand-strong: var(--indigo-8);
   --text: var(--gray-12);
@@ -8,4 +7,29 @@
   --surface-1: var(--gray-1);
   --surface-2: var(--gray-2);
   --surface-3: var(--gray-3);
+}
+
+/* Tryb dark – automatycznie (prefers-color-scheme) + ręczny (data-theme="dark") */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --text: var(--gray-1);
+    --muted: var(--gray-6);
+    --bg: var(--gray-12);
+    --surface-1: var(--gray-11);
+    --surface-2: var(--gray-10);
+    --surface-3: var(--gray-9);
+    --brand: var(--indigo-6);
+    --brand-strong: var(--indigo-7);
+  }
+}
+
+:root[data-theme='dark'] {
+  --text: var(--gray-1);
+  --muted: var(--gray-6);
+  --bg: var(--gray-12);
+  --surface-1: var(--gray-11);
+  --surface-2: var(--gray-10);
+  --surface-3: var(--gray-9);
+  --brand: var(--indigo-6);
+  --brand-strong: var(--indigo-7);
 }

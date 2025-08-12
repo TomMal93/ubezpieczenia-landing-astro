@@ -163,6 +163,19 @@ const cta = (await getCollection('cta'))[0];
     </Container>
   </Section>
 
+    <!-- JSON-LD: FAQPage -->
+  {faqItems.length > 0 && (
+    <script type="application/ld+json">
+      {JSON.stringify({
+        '@context':'https://schema.org',
+        '@type':'FAQPage',
+        mainEntity: faqItems.map((i) => ({
+          '@type':'Question', name: i.q, acceptedAnswer:{'@type':'Answer', text: i.a}
+        }))
+      })}
+    </script>
+  )}
+
   <!-- CENNIK (Content Collections) -->
   <Section class="bg-[var(--surface-1)]">
     <Container>

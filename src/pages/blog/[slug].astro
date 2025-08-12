@@ -5,6 +5,7 @@ import Section from '@/components/ui/Section.astro';
 import PostHeader from '@/components/blog/PostHeader.astro';
 import Prose from '@/components/blog/Prose.astro';
 import Breadcrumbs from '@/components/ui/Breadcrumbs.astro';
+import ToC from '@/components/blog/ToC.astro';
 import { getPosts, getPostBySlug } from '@/lib/hygraph';
 import { formatDatePL, tagHref } from '@/lib/utils';
 
@@ -28,56 +29,44 @@ const url = `${origin}/blog/${post.slug}`;
 <BaseLayout title={title} description={description} ogImage={ogImage}>
   <Section>
     <Container>
-      <Breadcrumbs items={[
-        { label: 'Strona główna', href: '/' },
-        { label: 'Blog', href: '/blog' },
-        { label: title }
-      ]} />
+      <Breadcrumbs items={[{ label: 'Strona główna', href: '/' },{ label: 'Blog', href: '/blog' },{ label: title }]} />
+      <div class="grid lg:grid-cols-[1fr,320px] gap-8">
+        <div>
+          <PostHeader title={title} date={formatDatePL(post.publishedAt)} tags={post.tags ?? []} />
+          <Prose>
+            <article class="prose">
+              <div set:html={post.content?.html ?? ''} />
+            </article>
+          </Prose>
+          {post.tags?.length ? (
+            <div class="mt-8 flex flex-wrap gap-2">
+              {post.tags.map((t) => <a class="btn-ghost" href={tagHref(t)}>#{t}</a>)}
+            </div>
+          ) : null}
+          <div class="mt-10"><a class="btn-ghost" href="/blog">← Wróć do bloga</a></div>
+        </div>
+        <ToC html={post.content?.html ?? ''} />
+      </div>
 
-      <PostHeader title={title} date={formatDatePL(post.publishedAt)} tags={post.tags ?? []} />
-      <!-- JSON-LD: Article + BreadcrumbList -->
+      <!-- JSON-LD Article + BreadcrumbList -->
       <script type="application/ld+json">
         {JSON.stringify({
-          '@context': 'https://schema.org',
-          '@type': 'Article',
-          headline: title,
-          description,
-          mainEntityOfPage: url,
+          '@context':'https://schema.org','@type':'Article',headline:title,description,mainEntityOfPage:url,
           image: post.coverImage?.url ? [post.coverImage.url] : undefined,
-          datePublished: post.publishedAt ?? undefined,
-          dateModified: post.publishedAt ?? undefined,
-          author: { '@type': 'Organization', name: 'TwojeUbezpieczenia' },
-          publisher: { '@type': 'Organization', name: 'TwojeUbezpieczenia' },
-          url
+          datePublished: post.publishedAt ?? undefined, dateModified: post.publishedAt ?? undefined,
+          author:{'@type':'Organization',name:'TwojeUbezpieczenia'}, publisher:{'@type':'Organization',name:'TwojeUbezpieczenia'}, url
         })}
       </script>
       <script type="application/ld+json">
         {JSON.stringify({
-          '@context': 'https://schema.org',
-          '@type': 'BreadcrumbList',
-          itemListElement: [
-            { '@type': 'ListItem', position: 1, name: 'Strona główna', item: `${origin}/` },
-            { '@type': 'ListItem', position: 2, name: 'Blog', item: `${origin}/blog` },
-            { '@type': 'ListItem', position: 3, name: title, item: url }
+          '@context':'https://schema.org','@type':'BreadcrumbList',
+          itemListElement:[
+            {'@type':'ListItem',position:1,name:'Strona główna',item:`${origin}/`},
+            {'@type':'ListItem',position:2,name:'Blog',item:`${origin}/blog`},
+            {'@type':'ListItem',position:3,name:title,item:url}
           ]
         })}
       </script>
-
-      <Prose>
-        <article class="prose">
-          <div set:html={post.content?.html ?? ''} />
-        </article>
-      </Prose>
-
-      {post.tags?.length ? (
-        <div class="mt-8 flex flex-wrap gap-2">
-          {post.tags.map((t) => <a class="btn-ghost" href={tagHref(t)}>#{t}</a>)}
-        </div>
-      ) : null}
-
-      <div class="mt-10">
-        <a class="btn-ghost" href="/blog">← Wróć do bloga</a>
-      </div>
     </Container>
   </Section>
 </BaseLayout>

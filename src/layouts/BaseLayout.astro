@@ -1,16 +1,16 @@
 ---
 import 'uno.css';
 import '@/styles/global.css';
+import ThemeToggle from '@/components/ui/ThemeToggle.astro';
 
 const {
   title = 'Ubezpieczenia – szybko, prosto, bez haczyków',
   description = 'Porównujemy oferty 12 towarzystw i pomagamy wybrać najlepszą ochronę.',
-  ogImage = '/images/hero.jpg',
-} = Astro.props as {
-  title?: string;
-  description?: string;
-  ogImage?: string;
-};
+  ogImage = '/images/hero.jpg'
+} = Astro.props as { title?: string; description?: string; ogImage?: string };
+
+const siteUrl = Astro.site ?? new URL('https://przyklad-ubezpieczenia.pl');
+const canonical = new URL(Astro.url?.pathname ?? '/', siteUrl).toString();
 ---
 
 <html lang="pl">
@@ -19,83 +19,87 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
     <title>{title}</title>
 
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta
-      property="og:image"
-      content={new URL(ogImage, Astro.site ?? 'https://przyklad-ubezpieczenia.pl').toString()}
-    />
+    <meta property="og:image" content={new URL(ogImage, siteUrl).toString()} />
     <meta property="og:type" content="website" />
-    <link rel="icon" href="/images/favicon.svg" type="image/svg+xml" />
-    <link rel="icon" href="/images/favicon.ico" sizes="any" />
+    <meta name="theme-color" content="#ffffff" />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+
+    <!-- anti-FOUC: ustaw motyw przed malowaniem -->
+    <script is:inline>
+      (function() {
+        try {
+          const saved = localStorage.getItem('theme');
+          const preferDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          document.documentElement.dataset.theme = saved || (preferDark ? 'dark' : 'light');
+        } catch {}
+      })();
+    </script>
 
     <style is:global>
-      .site-header[data-scrolled='true'] {
-        box-shadow: var(--shadow-2);
-        background: rgba(255, 255, 255, 0.9);
-        backdrop-filter: blur(6px);
-      }
-      .mobile-nav[hidden] {
-        display: none;
-      }
+      .site-header[data-scrolled='true'] { box-shadow: var(--shadow-2); background: rgba(255,255,255,.9); backdrop-filter: blur(6px); }
+      .mobile-nav[hidden] { display: none; }
     </style>
 
-    {
-      import.meta.env.CF_WEB_ANALYTICS_TOKEN && (
-        <script
-          defer
-          src="https://static.cloudflareinsights.com/beacon.min.js"
-          data-cf-beacon={`{"token": "${import.meta.env.CF_WEB_ANALYTICS_TOKEN}"}`}
-        />
-      )
-    }
+    {import.meta.env.CF_WEB_ANALYTICS_TOKEN && (
+      <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon={`{"token": "${import.meta.env.CF_WEB_ANALYTICS_TOKEN}"}`} />
+    )}
+
+    <!-- JSON-LD Organization + WebSite -->
+    <script type="application/ld+json">
+      {JSON.stringify({
+        '@context':'https://schema.org',
+        '@type':'Organization',
+        name:'TwojeUbezpieczenia',
+        url: siteUrl.toString(),
+        logo: new URL('/images/logo.svg', siteUrl).toString(),
+        sameAs:[]
+      })}
+    </script>
+    <script type="application/ld+json">
+      {JSON.stringify({
+        '@context':'https://schema.org',
+        '@type':'WebSite',
+        name:'TwojeUbezpieczenia',
+        url: siteUrl.toString(),
+        potentialAction:{
+          '@type':'SearchAction',
+          target: `${siteUrl.toString().replace(/\/$/,'')}/blog?search={search_term_string}`,
+          'query-input':'required name=search_term_string'
+        }
+      })}
+    </script>
   </head>
   <body>
-    <header
-      class="site-header sticky top-0 z-50 border-b border-[var(--surface-2)] bg-white/80 backdrop-blur"
-    >
+    <header class="site-header sticky top-0 z-50 border-b border-[var(--surface-2)] bg-white/80 backdrop-blur">
       <nav class="container flex items-center justify-between py-3" aria-label="Główna nawigacja">
         <a href="/" class="flex items-center gap-2 ring-focus" aria-label="Strona główna">
-          <img
-            src="/images/logo.svg"
-            alt="TwojeUbezpieczenia – logo"
-            width="28"
-            height="28"
-            decoding="async"
-            fetchpriority="high"
-          />
+          <img src="/images/logo.svg" alt="TwojeUbezpieczenia – logo" width="28" height="28" decoding="async" fetchpriority="high" />
           <span class="font-semibold">TwojeUbezpieczenia</span>
         </a>
 
         <!-- Desktop -->
-        <ul class="hidden md:flex items-center gap-6">
-          <li><a class="btn-ghost tap-target" href="/#oferta">Oferta</a></li>
-          <li><a class="btn-ghost tap-target" href="/#o-nas">O nas</a></li>
-          <li><a class="btn-ghost tap-target" href="/blog">Blog</a></li>
-          <li>
-            <a class="btn tap-target" href="/#kontakt" aria-label="Uzyskaj wycenę">Uzyskaj wycenę</a
-            >
-          </li>
-        </ul>
+        <div class="hidden md:flex items-center gap-2">
+          <ul class="flex items-center gap-2">
+            <li><a class="btn-ghost tap-target" href="/#oferta">Oferta</a></li>
+            <li><a class="btn-ghost tap-target" href="/#o-nas">O nas</a></li>
+            <li><a class="btn-ghost tap-target" href="/blog">Blog</a></li>
+            <li><a class="btn tap-target" href="/#kontakt" aria-label="Uzyskaj wycenę">Uzyskaj wycenę</a></li>
+          </ul>
+          <ThemeToggle />
+        </div>
 
         <!-- Mobile toggle -->
-        <button
-          id="menu-toggle"
-          class="icon-btn md:hidden"
-          aria-label="Otwórz menu"
-          aria-expanded="false"
-          aria-controls="mobile-menu"
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-            ><path
-              d="M4 7h16M4 12h16M4 17h16"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"></path></svg
-          >
+        <button id="menu-toggle" class="icon-btn md:hidden" aria-label="Otwórz menu" aria-expanded="false" aria-controls="mobile-menu">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         </button>
       </nav>
 
@@ -104,49 +108,35 @@ const {
       <nav id="mobile-menu" class="drawer md:hidden mobile-nav" aria-label="Menu mobilne" hidden>
         <div class="flex items-center justify-between mb-4">
           <strong>Menu</strong>
-          <button id="menu-close" class="icon-btn" aria-label="Zamknij menu">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-              ><path
-                d="M6 6l12 12M18 6L6 18"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"></path></svg
-            >
-          </button>
+          <div class="flex items-center gap-2">
+            <ThemeToggle />
+            <button id="menu-close" class="icon-btn" aria-label="Zamknij menu">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </button>
+          </div>
         </div>
         <ul class="space-y-1">
           <li><a class="btn-ghost tap-target w-full" href="/#oferta">Oferta</a></li>
           <li><a class="btn-ghost tap-target w-full" href="/#o-nas">O nas</a></li>
           <li><a class="btn-ghost tap-target w-full" href="/blog">Blog</a></li>
-          <li>
-            <a class="btn tap-target w-full justify-center" href="/#kontakt">Uzyskaj wycenę</a>
-          </li>
+          <li><a class="btn tap-target w-full justify-center" href="/#kontakt">Uzyskaj wycenę</a></li>
         </ul>
       </nav>
 
       <script is:inline>
         const header = document.querySelector('.site-header');
-        const onScroll = () =>
-          header && header.setAttribute('data-scrolled', String(window.scrollY > 4));
-        onScroll();
-        window.addEventListener('scroll', onScroll, { passive: true });
+        const onScroll = () => header && header.setAttribute('data-scrolled', String(window.scrollY > 4));
+        onScroll(); window.addEventListener('scroll', onScroll, { passive: true });
 
         const toggleBtn = document.getElementById('menu-toggle');
-        const closeBtn = document.getElementById('menu-close');
+        const closeBtn  = document.getElementById('menu-close');
         const menu = document.getElementById('mobile-menu');
         const overlay = document.getElementById('mobile-overlay');
-
-        const open = (v) => {
-          menu.hidden = overlay.hidden = !v;
-          toggleBtn?.setAttribute('aria-expanded', String(v));
-          document.body.style.overflow = v ? 'hidden' : '';
-        };
+        const open = (v) => { menu.hidden = overlay.hidden = !v; toggleBtn?.setAttribute('aria-expanded', String(v)); document.body.style.overflow = v ? 'hidden' : ''; };
         toggleBtn?.addEventListener('click', () => open(menu.hidden));
         closeBtn?.addEventListener('click', () => open(false));
         overlay?.addEventListener('click', () => open(false));
-        window.addEventListener('keydown', (e) => {
-          if (e.key === 'Escape') open(false);
-        });
+        window.addEventListener('keydown', (e) => { if (e.key === 'Escape') open(false); });
       </script>
     </header>
 
@@ -174,9 +164,7 @@ const {
           <p>tel. 123 456 789<br />biuro@twojeubezpieczenia.pl</p>
         </div>
       </div>
-      <div class="py-4 text-center text-sm muted">
-        © {new Date().getFullYear()} TwojeUbezpieczenia
-      </div>
+      <div class="py-4 text-center text-sm muted">© {new Date().getFullYear()} TwojeUbezpieczenia</div>
     </footer>
 
     {!import.meta.env.DEV && <link rel="stylesheet" href="/_pagefind/pagefind-ui.css" />}
