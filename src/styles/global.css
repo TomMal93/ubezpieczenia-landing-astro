@@ -4,7 +4,6 @@
 
 :root {
   color-scheme: light;
-  /* iOS safe areas */
   --safe-bottom: env(safe-area-inset-bottom, 0px);
   --safe-top: env(safe-area-inset-top, 0px);
 }
@@ -43,6 +42,10 @@ a {
   text-decoration-thickness: 2px;
   text-underline-offset: 3px;
 }
+/* Linki w DARK: nieco jaśniejsze */
+:root[data-theme='dark'] a {
+  color: color-mix(in oklab, var(--brand) 85%, white);
+}
 
 :where(a, button, input, select, textarea, [tabindex], [role='button']) {
   outline: none;
@@ -74,6 +77,10 @@ h2 {
   background-clip: text;
   color: transparent;
 }
+/* W DARK – jaśniejsze odcienie, żeby było czytelniej */
+:root[data-theme='dark'] .title-gradient {
+  background: linear-gradient(90deg, var(--indigo-4), var(--violet-4));
+}
 
 /* Drawer + overlay (animacje) */
 .mobile-nav.overlay {
@@ -91,7 +98,7 @@ h2 {
   transform: translateX(0);
 }
 
-/* Scroll-reveal (dla elementów z data-reveal) */
+/* Scroll-reveal */
 [data-reveal] {
   opacity: 0;
   transform: translate3d(0, 18px, 0);

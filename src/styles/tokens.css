@@ -1,35 +1,63 @@
+/* tokens.css — jasny + ciemny (OLED-friendly) motyw na zmiennych */
 :root {
+  /* Brand / akcent */
   --brand: var(--indigo-7);
   --brand-strong: var(--indigo-8);
+
+  /* Tekst i tła – LIGHT */
   --text: var(--gray-12);
   --muted: var(--gray-7);
   --bg: var(--gray-0);
   --surface-1: var(--gray-1);
   --surface-2: var(--gray-2);
   --surface-3: var(--gray-3);
+
+  /* Warstwowe tło komponentów (karty, nawigacja) */
+  --surface-card: rgba(255, 255, 255, 0.9);
+
+  /* Header (sticky) – jasny */
+  --header-bg: rgba(255, 255, 255, 0.8);
+  --header-bg-scrolled: rgba(255, 255, 255, 0.9);
 }
 
-/* Tryb dark – automatycznie (prefers-color-scheme) + ręczny (data-theme="dark") */
+/* DARK: automatycznie wg systemu, jeśli użytkownik ręcznie nie wymusił light */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
     --text: var(--gray-1);
     --muted: var(--gray-6);
-    --bg: var(--gray-12);
-    --surface-1: var(--gray-11);
-    --surface-2: var(--gray-10);
-    --surface-3: var(--gray-9);
+    /* lekko „czarny” (OLED-friendly) z niebieskawym odcieniem */
+    --bg: #0b0b0f;
+    --surface-1: #111117;
+    --surface-2: #16161d;
+    --surface-3: #1b1b24;
+
+    /* brand ciut jaśniejszy, żeby nie wbijał po oczach */
     --brand: var(--indigo-6);
     --brand-strong: var(--indigo-7);
+
+    /* półprzezroczyste karty */
+    --surface-card: rgba(12, 12, 16, 0.7);
+
+    /* Header (sticky) – ciemny */
+    --header-bg: rgba(10, 10, 14, 0.6);
+    --header-bg-scrolled: rgba(10, 10, 14, 0.75);
   }
 }
 
+/* DARK: ręczne wymuszenie (przełącznik) */
 :root[data-theme='dark'] {
   --text: var(--gray-1);
   --muted: var(--gray-6);
-  --bg: var(--gray-12);
-  --surface-1: var(--gray-11);
-  --surface-2: var(--gray-10);
-  --surface-3: var(--gray-9);
+  --bg: #0b0b0f;
+  --surface-1: #111117;
+  --surface-2: #16161d;
+  --surface-3: #1b1b24;
+
   --brand: var(--indigo-6);
   --brand-strong: var(--indigo-7);
+
+  --surface-card: rgba(12, 12, 16, 0.7);
+
+  --header-bg: rgba(10, 10, 14, 0.6);
+  --header-bg-scrolled: rgba(10, 10, 14, 0.75);
 }
