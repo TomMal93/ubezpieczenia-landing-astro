@@ -7,11 +7,12 @@ import Eyebrow from '@/components/ui/Eyebrow.astro';
 import Card from '@/components/ui/Card.astro';
 import Input from '@/components/ui/Input.astro';
 import Textarea from '@/components/ui/Textarea.astro';
-import ReviewSlider from '@/components/islands/ReviewSlider.svelte';
-import FaqAccordion from '@/components/islands/FaqAccordion.svelte';
-import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import hero from '@/assets/hero.jpg';
+import ReviewSlider from '@/components/islands/ReviewSlider.svelte';
+import FaqAccordion from '@/components/islands/FaqAccordion.svelte';
+import MobileCta from '@/components/ui/MobileCta.astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
 
 const pageTitle = 'Ubezpieczenia szyte na miarę – szybko, prosto, bez ukrytych haczyków.';
 const pageDesc =
@@ -21,52 +22,52 @@ const faqItems = (await getCollection('faq'))
   .sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0))
   .map((i) => ({ q: i.data.question, a: i.data.answer }));
 
-const plans = await getCollection('pricing');
+const plans = (await getCollection('pricing')) as CollectionEntry<'pricing'>[];
 const cta = (await getCollection('cta'))[0];
 ---
 
 <BaseLayout title={pageTitle} description={pageDesc} ogImage="/images/hero.jpg">
   <!-- HERO -->
-  <Section class="pt-10">
+  <Section class="pt-6 sm:pt-10">
     <Container>
-      <div class="grid lg:grid-cols-2 items-center gap-10">
+      <div class="grid lg:grid-cols-2 items-center gap-8 sm:gap-10">
         <div>
           <Eyebrow>Bezpiecznie i transparentnie</Eyebrow>
-          <h1 class="mt-2 text-4xl sm:text-5xl font-extrabold">{pageTitle}</h1>
-          <p class="lead mt-4">{pageDesc}</p>
-          <div class="mt-6 flex gap-3">
+          <h1 class="mt-2 font-extrabold">{pageTitle}</h1>
+          <p class="lead mt-3">{pageDesc}</p>
+          <div class="mt-5 flex gap-3">
             <Button href="#kontakt" ariaLabel="Uzyskaj wycenę">Uzyskaj wycenę</Button>
             <Button href="tel:123456789" variant="ghost" ariaLabel="Zadzwoń"
               >Zadzwoń: 123 456 789</Button
             >
           </div>
 
-          <div class="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <Card>
-              <p class="text-sm">
+          <div class="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <Card
+              ><p class="text-sm">
                 <strong>4.9/5</strong><br /><span class="muted">opinie klientów</span>
-              </p>
-            </Card>
-            <Card>
-              <p class="text-sm">
+              </p></Card
+            >
+            <Card
+              ><p class="text-sm">
                 <strong>24/7</strong><br /><span class="muted">Assistance</span>
-              </p>
-            </Card>
-            <Card>
-              <p class="text-sm">
+              </p></Card
+            >
+            <Card
+              ><p class="text-sm">
                 <strong>12</strong><br /><span class="muted">towarzystw w porównaniu</span>
-              </p>
-            </Card>
+              </p></Card
+            >
           </div>
         </div>
 
-        <div class="relative">
+        <div class="relative order-first lg:order-none">
           <Image
             src={hero}
             alt="Rodzina korzystająca z ubezpieczenia – spokój i bezpieczeństwo"
             widths={[400, 600, 800, 1200]}
             sizes="(max-width: 1024px) 100vw, 600px"
-            class="rounded-2xl shadow-lg"
+            class="rounded-2xl shadow-lg w-full h-auto"
             loading="eager"
             decoding="async"
           />
@@ -210,7 +211,7 @@ const cta = (await getCollection('cta'))[0];
       <h2 class="text-3xl font-bold mt-2">Porozmawiaj z doradcą</h2>
       <form
         id="contact-form"
-        class="mt-6 grid gap-4 md:grid-cols-2 card p-6"
+        class="mt-6 grid gap-4 md:grid-cols-2 card p-4 sm:p-6"
         action="#"
         method="post"
         novalidate
@@ -234,10 +235,27 @@ const cta = (await getCollection('cta'))[0];
             >Wyrażam zgodę na kontakt telefoniczny lub e-mail w celu przygotowania oferty.</label
           >
         </div>
-        <div><button class="btn" aria-label="Wyślij">Wyślij</button></div>
+        <div><button class="btn tap-target" aria-label="Wyślij">Wyślij</button></div>
         <p id="form-msg" class="md:col-span-2 text-sm muted" aria-live="polite"></p>
       </form>
-      <script type="module" src="/src/scripts/contact.ts"></script>
+      <script type="module">
+        const form = document.getElementById('contact-form');
+        const msg = document.getElementById('form-msg');
+        form?.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const f = e.currentTarget;
+          if (!f.checkValidity()) {
+            f.reportValidity();
+            msg.textContent = 'Uzupełnij wymagane pola.';
+            return;
+          }
+          msg.textContent = 'Dziękujemy! Skontaktujemy się wkrótce.';
+          f.reset();
+        });
+      </script>
     </Container>
   </Section>
+
+  <!-- Sticky CTA na mobile -->
+  <MobileCta />
 </BaseLayout>

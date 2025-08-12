@@ -1,0 +1,18 @@
+---
+interface Props {
+  primaryHref?: string;
+  phoneHref?: string;
+}
+const { primaryHref = '#kontakt', phoneHref = 'tel:123456789' } = Astro.props as Props;
+---
+
+<div class="md:hidden fixed left-0 right-0 bottom-0 z-40 px-4 mobile-cta-safe">
+  <div class="card shadow-lg bg-white p-3 flex items-center gap-3">
+    <a href={phoneHref} class="btn-ghost tap-target flex-1 justify-center" aria-label="Zadzwoń"
+      >Zadzwoń</a
+    >
+    <a href={primaryHref} class="btn tap-target flex-1 justify-center" aria-label="Uzyskaj wycenę"
+      >Wyceń</a
+    >
+  </div>
+</div>
