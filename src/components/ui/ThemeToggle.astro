@@ -2,10 +2,9 @@
 const label = 'Przełącz motyw';
 ---
 
-<!-- brak ID, wszystko będzie szukane względnie do tego kontenera -->
+<!-- bez ID; skrypt działa w prywatnym zakresie komponentu -->
 <div class="inline-flex items-center" data-theme-toggle>
   <button class="icon-btn" type="button" aria-label={label} title={label} aria-pressed="false">
-    <!-- moon/sun -->
     <svg class="tt-moon" width="20" height="20" viewBox="0 0 24 24" fill="none">
       <path
         d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"
@@ -24,11 +23,10 @@ const label = 'Przełącz motyw';
   </button>
 </div>
 
-<!-- zamknięte w IIFE, więc nic nie trafia do globalnego scope -->
 <script is:inline>
   (() => {
     const rootEl = document.documentElement;
-    const host = document.currentScript?.previousElementSibling; // <div data-theme-toggle> przed <script>
+    const host = document.currentScript?.previousElementSibling;
     if (!host) return;
 
     const btn = host.querySelector('button');

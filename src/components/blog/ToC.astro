@@ -1,5 +1,5 @@
 ---
-/** Spis treści z H2/H3. Generuje linki + podświetla aktywną sekcję. */
+/** Spis treści H2/H3 + podświetlanie aktywnej sekcji. */
 interface Props {
   html: string;
 }
@@ -54,7 +54,7 @@ const items = matches.map((m) => {
     if (!h.id) h.id = toSlug(h.textContent || '');
   });
 
-  // Aktywny link w ToC
+  // Podświetl aktywną sekcję
   const links = Array.from(document.querySelectorAll('[data-toc-id]'));
   const map = new Map(links.map((a) => [a.getAttribute('data-toc-id'), a]));
   const io = new IntersectionObserver(

@@ -3,12 +3,53 @@ interface Props {
   href?: string;
   variant?: 'solid' | 'ghost';
   ariaLabel?: string;
+  class?: string;
+  rel?: string;
+  target?: string;
 }
-const { href, variant = 'solid', ariaLabel } = Astro.props as Props;
-const classes = variant === 'ghost' ? 'btn-ghost' : 'btn';
+const { href, variant = 'solid', ariaLabel, class: klass = '', rel, target } = Astro.props as Props;
+const base = variant === 'ghost' ? 'btn-ghost' : 'btn shine';
 ---
-{href ? (
-  <a class={classes} href={href} aria-label={ariaLabel}><slot /></a>
-) : (
-  <button class={classes} aria-label={ariaLabel}><slot /></button>
-)}
+
+{
+  href ? (
+    <a href={href} aria-label={ariaLabel} class={`${base} ${klass}`} rel={rel} target={target}>
+      <slot />
+    </a>
+  ) : (
+    <button aria-label={ariaLabel} class={`${base} ${klass}`}>
+      <slot />
+    </button>
+  )
+}
+
+<style>
+  /* Shine efekt tylko dla .shine */
+  .shine {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .shine::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    translate: -120% 0;
+    background: linear-gradient(
+      115deg,
+      transparent 40%,
+      rgba(255, 255, 255, 0.35) 50%,
+      transparent 60%
+    );
+    transition: translate 700ms var(--ease-3);
+    pointer-events: none;
+  }
+  .shine:hover::after {
+    translate: 120% 0;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .shine::after {
+      display: none;
+    }
+  }
+</style>

@@ -124,19 +124,48 @@ const canonical = new URL(Astro.url?.pathname ?? '/', siteUrl).toString();
       </nav>
 
       <script is:inline>
+        // Sticky header
         const header = document.querySelector('.site-header');
         const onScroll = () => header && header.setAttribute('data-scrolled', String(window.scrollY > 4));
         onScroll(); window.addEventListener('scroll', onScroll, { passive: true });
 
+        // Drawer (płynny)
         const toggleBtn = document.getElementById('menu-toggle');
         const closeBtn  = document.getElementById('menu-close');
         const menu = document.getElementById('mobile-menu');
         const overlay = document.getElementById('mobile-overlay');
-        const open = (v) => { menu.hidden = overlay.hidden = !v; toggleBtn?.setAttribute('aria-expanded', String(v)); document.body.style.overflow = v ? 'hidden' : ''; };
-        toggleBtn?.addEventListener('click', () => open(menu.hidden));
-        closeBtn?.addEventListener('click', () => open(false));
-        overlay?.addEventListener('click', () => open(false));
-        window.addEventListener('keydown', (e) => { if (e.key === 'Escape') open(false); });
+
+        const openDrawer = (open) => {
+          if (!menu || !overlay) return;
+          if (open) {
+            menu.hidden = overlay.hidden = false;
+            requestAnimationFrame(() => { menu.classList.add('open'); overlay.classList.add('open'); });
+            toggleBtn?.setAttribute('aria-expanded', 'true');
+            document.body.style.overflow = 'hidden';
+          } else {
+            menu.classList.remove('open'); overlay.classList.remove('open');
+            const after = () => { menu.hidden = overlay.hidden = true; };
+            menu.addEventListener('transitionend', after, { once: true });
+            toggleBtn?.setAttribute('aria-expanded', 'false');
+            document.body.style.overflow = '';
+          }
+        };
+        toggleBtn?.addEventListener('click', () => openDrawer(menu?.hidden));
+        closeBtn?.addEventListener('click', () => openDrawer(false));
+        overlay?.addEventListener('click', () => openDrawer(false));
+        window.addEventListener('keydown', (e) => { if (e.key === 'Escape') openDrawer(false); });
+
+        // Scroll-reveal
+        const prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const revealEls = Array.from(document.querySelectorAll('[data-reveal]'));
+        if (prefersReduce) {
+          revealEls.forEach(el => el.classList.add('is-visible'));
+        } else if (revealEls.length) {
+          const io = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); } });
+          }, { rootMargin: '0px 0px -10% 0px', threshold: 0.1 });
+          revealEls.forEach(el => io.observe(el));
+        }
       </script>
     </header>
 

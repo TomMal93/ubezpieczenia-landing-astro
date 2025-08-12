@@ -1,5 +1,4 @@
 ---
-import Badge from '@/components/ui/Badge.astro';
 interface Props {
   title: string;
   date?: string;
@@ -7,12 +6,8 @@ interface Props {
 }
 const { title, date, tags = [] } = Astro.props as Props;
 ---
+
 <header class="mb-8">
   <h1 class="text-4xl sm:text-5xl font-bold">{title}</h1>
   {date && <p class="mt-2 muted">{date}</p>}
-  {tags.length > 0 && (
-    <div class="mt-4 flex flex-wrap gap-2">
-      {tags.map((t) => <Badge>{t}</Badge>)}
-    </div>
-  )}
 </header>
